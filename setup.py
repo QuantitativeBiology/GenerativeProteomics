@@ -5,8 +5,8 @@ with open("README.md", 'r') as f:
 
 
 setup(
-    name="ProtoGen",
-    version="0.2.0",
+    name="GenerativeProteomics",
+    version="0.1.0",
     author="Diogo Ferreira, Emanuel Gonçalves, Jorge Ribeiro, Leandro Sobral, Rita Gama",  
     author_email="quantitative-biology@googlegroups.com",  
     description="A Python package for synthetic proteomics data augmentation using ProtoGAIN",
@@ -26,10 +26,11 @@ setup(
     ],  
     classifiers=[
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: OSI Approved :: BSD License",  
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.10",  # Minimum Python version
+    python_requires=">=3.10, <3.12",  # Minimum Python version
     license="BSD-3-Clause",  
    
    # entry_points={

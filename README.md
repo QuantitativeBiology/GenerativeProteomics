@@ -1,4 +1,4 @@
-# ProtoGen
+# GenerativeProteomics
 WORK STILL IN PROGRESS
 
 In this repository you may find a PyTorch implementation of Generative Adversarial Imputation Networks (GAIN) [[1]](#1) for imputing missing iBAQ values in proteomics datasets.
@@ -15,7 +15,7 @@ In this repository you may find a PyTorch implementation of Generative Adversari
 1. Clone this repository:  `git clone https://github.com/QuantitativeBiology/ProtoGain/`
 2. Create a Python environment: `conda create -n proto python=3.10` if you have conda installed
 3. Activate the previously created environment: `conda activate proto`
-4. Install the necessary packages: `pip install -r libraries.txt`
+4. Install the necessary packages: `pip install -r requirements.txt`
 
 
 ## How to Use
@@ -28,7 +28,7 @@ Running in this manner will result in two separate training phases.
 2) Imputation run: Then a proper training phase takes place using the entire dataset. An `imputed.csv` file will be created containing the imputed dataset.
 
 
-However, there are a few arguments which you may want to change. You can do this using a parameters.json file (you may find an example in `ProtoGen/breast/parameters.json`) or you can choose them directly in the command line.
+However, there are a few arguments which you may want to change. You can do this using a parameters.json file (you may find an example in `GenerativeProteomics/breast/parameters.json`) or you can choose them directly in the command line.
 
 Run with a parameters.json file: `python protogain.py --parameters /path/to/parameters.json`<br>
 Run with command line arguments: `python protogain.py -i /path/to/file_to_impute.csv -o imputed_name --ofolder ./results/ --it 2001`

@@ -7,7 +7,7 @@ from torch import nn
 import numpy as np
 
 from tqdm import tqdm
-from ProtoGen.utils import *
+from GenerativeProteomics.utils import *
 
 import psutil
 

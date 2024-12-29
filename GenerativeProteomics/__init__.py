@@ -1,28 +1,28 @@
 # Importing functionalities from each module in the package
 
 # Core dataset utilities
-from ProtoGen.dataset import (
+from GenerativeProteomics.dataset import (
     Data,
     generate_hint,
     generate_mask,
 )
 
 # Hyperparameter management
-from ProtoGen.hypers import Params
+from GenerativeProteomics.hypers import Params
 
 # Core model architecture
-from ProtoGen.model import Network
+from GenerativeProteomics.model import Network
 
 # Metrics and output utilities
-from ProtoGen.output import Metrics
+from GenerativeProteomics.output import Metrics
 
 # Main ProtoGAIN logic
-from ProtoGen.protogain import init_arg
+from GenerativeProteomics.protogain import init_arg
     # Entry point for running the main pipeline
 
 
 # General utility functions
-from ProtoGen.utils import (
+from GenerativeProteomics.utils import (
     create_csv,
     create_dist,
     create_missing,
