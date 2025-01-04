@@ -31,6 +31,10 @@ class Metrics:
 
         self.data_imputed = None
         self.ref_data_imputed = None
+        self.ref_mean_imputed = None
+
+        self.ref_MF_imputed = None
+        self.ref_MF_imputed_T = None
 
     def create_output(cls, data, name: str):
         hypers = cls.hypers  # Accessing metrics.hypers

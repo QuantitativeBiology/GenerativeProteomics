@@ -9,13 +9,14 @@ class Params:
         input=None,
         output="imputed",
         ref=None,
+        output_eval="test_imputed.csv",
         output_folder=f"{os.getcwd()}/results/",
-        header=None,
-        num_iterations=2001,
+        num_iterations=2000,
         batch_size=128,
-        alpha=10,
-        miss_rate=0.1,
+        alpha=0.2,
+        miss_rate=0.2,
         hint_rate=0.9,
+        train_ratio=0.8,
         lr_D=0.001,
         lr_G=0.001,
         override=0,
@@ -23,14 +24,15 @@ class Params:
     ):
         self.input = input
         self.output = output
+        self.output_eval = output_eval
         self.output_folder = output_folder
         self.ref = ref
-        self.header = header
         self.num_iterations = num_iterations
         self.batch_size = batch_size
         self.alpha = alpha
         self.miss_rate = miss_rate
         self.hint_rate = hint_rate
+        self.train_ratio = train_ratio
         self.lr_D = lr_D
         self.lr_G = lr_G
         self.override = override
@@ -52,12 +54,14 @@ class Params:
         input = params["input"]
         output = params["output"]
         ref = params["ref"]
+        output_eval = params["output_eval"]
         output_folder = params["output_folder"]
         num_iterations = params["num_iterations"]
         batch_size = params["batch_size"]
         alpha = params["alpha"]
         miss_rate = params["miss_rate"]
         hint_rate = params["hint_rate"]
+        train_ratio = params["train_ratio"]
         lr_D = params["lr_D"]
         lr_G = params["lr_G"]
         override = params["override"]
@@ -67,13 +71,14 @@ class Params:
             input,
             output,
             ref,
+            output_eval,
             output_folder,
-            None,
             num_iterations,
             batch_size,
             alpha,
             miss_rate,
             hint_rate,
+            train_ratio,
             lr_D,
             lr_G,
             override,
