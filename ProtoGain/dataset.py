@@ -6,9 +6,11 @@ from missforest import MissForest
 
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
+from hypers import Params
+
 
 class Data:
-    def __init__(self, dataset, miss_rate, hint_rate, ref=None, axis="columns"):
+    def __init__(self, dataset, params: Params, ref=None, axis="columns"):
 
         self.ref_mean_imputed = None
         self.ref_mean_scaled = None
@@ -20,7 +22,7 @@ class Data:
         # dataset = np.where(mask, dataset, 0.0)
         # dataset_scaled = np.where(mask, dataset_scaled, 0.0)
 
-        ###### Initialize nans with mean of the protein
+        ###### Initialize nans with mean abundance of the protein
         dataset = pd.DataFrame(dataset)
 
         if axis == "columns":
@@ -42,7 +44,7 @@ class Data:
         dataset_scaled = self.scaler.fit_transform(dataset)
         # dataset_scaled_T = self.scaler_T.fit_transform(dataset.T)
 
-        hint = generate_hint(mask, hint_rate)
+        hint = generate_hint(mask, params.hint_rate)
 
         self.dataset = torch.from_numpy(dataset)
         self.mask = torch.from_numpy(mask)
@@ -59,7 +61,7 @@ class Data:
         if ref is not None:
             ref_mask = np.where(np.isnan(ref), 0.0, 1.0)
             ref_dataset = np.where(ref_mask, ref, 0.0)
-            ref_hint = generate_hint(ref_mask, hint_rate)
+            ref_hint = generate_hint(ref_mask, params.hint_rate)
             ref_dataset_scaled = self.scaler.transform(ref_dataset)
             ref_missingness = 1 - ref_mask.mean(axis=0)
 
@@ -69,19 +71,19 @@ class Data:
             self.ref_dataset_scaled = torch.from_numpy(ref_dataset_scaled)
             self.ref_missingness = torch.from_numpy(ref_missingness)
         else:
-            self._create_ref(miss_rate, hint_rate, axis)
+            self._create_ref(params, axis)
 
         print("\nNumber of samples:", self.dataset.shape[0])
         print("Number of features:", self.dataset.shape[1])
         print("Missing Rate (%):", (1.0 - self.mask.mean().item()) * 100.0)
 
-    def _create_ref(cls, miss_rate, hint_rate, axis):
+    def _create_ref(cls, params: Params, axis):
 
         cls.ref_mask = cls.mask.detach().clone()
         cls.ref_dataset = cls.dataset.detach().clone()
         zero_idxs = torch.nonzero(cls.mask == 1)
         chance = torch.rand(len(zero_idxs))
-        miss = chance > miss_rate
+        miss = chance > params.miss_rate
 
         selected_idx = zero_idxs[~miss]
         for idx in selected_idx:
@@ -101,7 +103,7 @@ class Data:
 
         cls.ref_mean_imputed = torch.tensor(df_dummy.values)
 
-        cls.ref_hint = generate_hint(cls.ref_mask, hint_rate)
+        cls.ref_hint = generate_hint(cls.ref_mask, params.hint_rate)
         cls.ref_dataset_scaled = torch.from_numpy(cls.scaler.transform(cls.ref_dataset))
         cls.ref_mean_scaled = torch.from_numpy(
             cls.scaler.transform(cls.ref_mean_imputed)
@@ -114,14 +116,15 @@ class Data:
         cls.ref_hint_T = cls.ref_hint.T
         cls.ref_dataset_scaled_T = cls.ref_dataset_scaled.T
 
-        cls.ref_MF_imputed_T = cls.MF_impute()
+        if params.miss_forest == 1:
+            cls.ref_MF_imputed_T = cls.MF_impute()
 
-        cls.ref_MF_scaled_T = torch.from_numpy(
-            cls.scaler.transform(cls.ref_MF_imputed_T.T)
-        ).T
+            cls.ref_MF_scaled_T = torch.from_numpy(
+                cls.scaler.transform(cls.ref_MF_imputed_T.T)
+            ).T
 
-        cls.ref_MF_imputed = cls.ref_MF_imputed_T.T
-        cls.ref_MF_scaled = cls.ref_MF_scaled_T.T
+            cls.ref_MF_imputed = cls.ref_MF_imputed_T.T
+            cls.ref_MF_scaled = cls.ref_MF_scaled_T.T
 
     def MF_impute(cls):
         mf = MissForest()
