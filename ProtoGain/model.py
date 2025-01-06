@@ -65,14 +65,27 @@ class Network:
 
         return cls.net_G(input_G)
 
-    def impute(cls, data: Data):
-        sample_G = cls.generate_sample(data.dataset_scaled, data.mask)
-        data_imputed_scaled = data.dataset_scaled * data.mask + sample_G * (
-            1 - data.mask
-        )
-        cls.metrics.data_imputed = data.scaler.inverse_transform(
-            data_imputed_scaled.detach().numpy()
-        )
+    def impute(cls, data: Data, transpose):
+        if transpose == 0:
+            sample_G = cls.generate_sample(data.dataset_scaled, data.mask)
+            data_imputed_scaled = data.dataset_scaled * data.mask + sample_G * (
+                1 - data.mask
+            )
+
+            cls.metrics.data_imputed = data.scaler.inverse_transform(
+                data_imputed_scaled.detach().numpy()
+            )
+
+        elif transpose == 1:
+            print(data.dataset_scaled_T.shape, data.mask_T.shape)
+            sample_G = cls.generate_sample(data.dataset_scaled_T, data.mask_T)
+            data_imputed_scaled = data.dataset_scaled_T * data.mask_T + sample_G * (
+                1 - data.mask_T
+            )
+
+            cls.metrics.data_imputed = data.scaler.inverse_transform(
+                data_imputed_scaled.T.detach().numpy()
+            ).T
 
     def _calculate_impute(cls, data: Data, transpose=0):
 
@@ -422,18 +435,18 @@ class Network:
         if transpose == 0:
             # dim = data.ref_dataset_scaled.shape[1]
             train_size = data.dataset_scaled.shape[0]
-            data_train = data.mask
-            mask_train = data.ref_mask
+            data_train = data.dataset_scaled
+            mask_train = data.mask
             # hint_train = data.ref_hint
             missingness = data.missingness
 
         elif transpose == 1:
             # dim = data.ref_dataset_scaled_T.shape[1]
             train_size = data.dataset_scaled_T.shape[0]
-            data_train = data.ref_dataset_scaled_T
+            data_train = data.dataset_scaled_T
             mask_train = data.mask_T
             # hint_train = data.ref_hint
-            missingness = data.ref_missingness
+            missingness = data.missingness
 
         if train_size < cls.hypers.batch_size:
             cls.hypers.batch_size = train_size
@@ -444,8 +457,8 @@ class Network:
         pbar = tqdm(range(cls.hypers.num_iterations))
         for it in pbar:
 
-            batch, mask_batch, hint_batch, _ = cls._create_batch(
-                data_train, mask_train, missingness, mean
+            batch, mask_batch, hint_batch = cls._create_batch(
+                data_train, mask_train, missingness
             )
 
             cls._calculate_losses_train(it, batch, mask_batch, hint_batch)
@@ -459,7 +472,7 @@ class Network:
             cls.metrics.ram[it] = psutil.virtual_memory()[3] / 1000000000
             cls.metrics.ram_percentage[it] = psutil.virtual_memory()[2]
 
-        cls.impute(data)
+        cls.impute(data, transpose)
 
         if cls.hypers.output_all == 1:
             utils.output(
@@ -477,7 +490,7 @@ class Network:
                 cls.hypers.override,
             )
 
-    def _create_batch(cls, dataset, mask, missingness, mean):
+    def _create_batch(cls, dataset, mask, missingness, mean=None):
 
         mb_idx = utils.sample_idx(dataset.shape[0], cls.hypers.batch_size)
 
@@ -487,9 +500,14 @@ class Network:
         hint_batch = generate_hint_paper_missingness(
             mask_batch, cls.hypers.hint_rate, missingness[mb_idx]
         )
-        mean_batch = mean[mb_idx].detach().clone()
 
-        return data_batch, mask_batch, hint_batch, mean_batch
+        if mean is not None:
+            mean_batch = mean[mb_idx].detach().clone()
+
+            return data_batch, mask_batch, hint_batch, mean_batch
+
+        else:
+            return data_batch, mask_batch, hint_batch
 
     def _calculate_losses_evaluation_run(
         cls, iteration, train_batch, train_mask_batch, train_hint_batch, sample_G
@@ -507,7 +525,7 @@ class Network:
         ).mean()
 
     def _calculate_losses_train(cls, iteration, batch, mask_batch, hint_batch):
-        Z = torch.rand((cls.hypers.batch_size, batch)) * 0.01
+        Z = torch.rand((cls.hypers.batch_size, batch.shape[1])) * 0.01
         cls.metrics.loss_D[iteration] = cls._update_D(
             batch, mask_batch, hint_batch, Z, cls.loss
         )
