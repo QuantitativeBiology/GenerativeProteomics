@@ -445,7 +445,7 @@ class Network:
         for it in pbar:
 
             batch, mask_batch, hint_batch, _ = cls._create_batch(
-                data_train, mask_train, missingness
+                data_train, mask_train, missingness, mean
             )
 
             cls._calculate_losses_train(it, batch, mask_batch, hint_batch)
