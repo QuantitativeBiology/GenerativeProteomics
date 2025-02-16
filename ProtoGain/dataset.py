@@ -34,10 +34,8 @@ class Data:
             dataset = dataset.T
             dataset = dataset.values
             missingness = 1 - mask.mean(axis=1)
-        #########################################
 
         # MinMaxScaler
-
         self.scaler = MinMaxScaler()
         # self.scaler_T = MinMaxScaler()
 
@@ -95,13 +93,17 @@ class Data:
 
         if axis == "columns":
             df_dummy = df_dummy.fillna(df_dummy.mean(axis=0))
+            df_dummy = df_dummy.fillna(0)
             cls.ref_missingness = 1 - cls.ref_mask.mean(axis=0)
+
         elif axis == "rows":
             df_dummy = df_dummy.T.fillna(df_dummy.mean(axis=1))
+            df_dummy = df_dummy.T.fillna(0)
             df_dummy = df_dummy.T
             cls.ref_missingness = 1 - cls.ref_mask.mean(axis=1)
 
         cls.ref_mean_imputed = torch.tensor(df_dummy.values)
+        cls.ref_dataset = torch.tensor(df_dummy.values)
 
         cls.ref_hint = generate_hint(cls.ref_mask, params.hint_rate)
         cls.ref_dataset_scaled = torch.from_numpy(cls.scaler.transform(cls.ref_dataset))
@@ -176,8 +178,15 @@ def generate_hint_paper(mask, hint_rate, missingness):
     return hint
 
 
-def generate_hint_paper_missingness(mask, hint_rate, missingness):
+def generate_hint_paper_missingness(mask, hint_rate, missingness, transpose, mb_idx):
     hint_mask = generate_mask(mask, 1 - hint_rate)
-    hint = mask * hint_mask + np.multiply((1 - missingness), (1 - hint_mask).T).T
+
+    if transpose == 1:
+        hint = (
+            mask * hint_mask
+            + np.multiply((1 - missingness[mb_idx]), (1 - hint_mask).T).T
+        )
+    elif transpose == 0:
+        hint = mask * hint_mask + np.multiply((1 - missingness), (1 - hint_mask))
 
     return hint

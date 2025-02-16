@@ -22,6 +22,9 @@ import argparse
 import os
 import psutil
 
+torch.manual_seed(42)
+np.random.seed(42)
+
 
 def init_arg():
     parser = argparse.ArgumentParser()
@@ -129,6 +132,9 @@ if __name__ == "__main__":
         output_all = params.output_all
         miss_forest = params.miss_forest
 
+        project = args.project
+        cores = args.cores
+
     else:
         params = Params(
             missing_file,
@@ -224,7 +230,7 @@ if __name__ == "__main__":
 
         data = Data(missing, params, axis="columns")
 
-        # model.evaluation_run(data, missing_header, transpose=0)
+        model.evaluation_run(data, missing_header, transpose=0)
         # model.train(data, missing_header, transpose=0)
 
         ################ Starting Transpose run ################
@@ -261,7 +267,7 @@ if __name__ == "__main__":
         model = Network(hypers=params, net_G=net_G, net_D=net_D, metrics=metrics)
 
         model.evaluation_run(data, missing_header, transpose=1)
-        model.train(data, missing_header, transpose=1)
+        # model.train(data, missing_header, transpose=1)
 
         #########################################################################
 

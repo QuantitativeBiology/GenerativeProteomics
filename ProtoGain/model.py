@@ -110,7 +110,7 @@ class Network:
                 if cls.hypers.miss_forest == 1:
                     ref_imputed[i] = np.array(
                         [
-                            data.dataset_T[tuple(id)],
+                            data.dataset[tuple(id)],
                             cls.metrics.ref_data_imputed[tuple(id)],
                             id[0],
                             id[1],
@@ -121,7 +121,7 @@ class Network:
                 elif cls.hypers.miss_forest == 0:
                     ref_imputed[i] = np.array(
                         [
-                            data.dataset_T[tuple(id)],
+                            data.dataset[tuple(id)],
                             cls.metrics.ref_data_imputed[tuple(id)],
                             id[0],
                             id[1],
@@ -377,10 +377,11 @@ class Network:
         for it in pbar:
 
             train_batch, train_mask_batch, train_hint_batch, mean_batch = (
-                cls._create_batch(data_train, mask_train, missingness, mean)
+                cls._create_batch(data_train, mask_train, missingness, mean, transpose)
             )
+
             test_batch, test_mask_batch, _, _ = cls._create_batch(
-                data_test, mask_test, missingness, mean
+                data_test, mask_test, missingness, mean, transpose
             )
 
             sample_G = cls.generate_sample(train_batch, train_mask_batch)
@@ -458,7 +459,7 @@ class Network:
         for it in pbar:
 
             batch, mask_batch, hint_batch = cls._create_batch(
-                data_train, mask_train, missingness
+                data_train, mask_train, missingness, transpose
             )
 
             cls._calculate_losses_train(it, batch, mask_batch, hint_batch)
@@ -490,7 +491,7 @@ class Network:
                 cls.hypers.override,
             )
 
-    def _create_batch(cls, dataset, mask, missingness, mean=None):
+    def _create_batch(cls, dataset, mask, missingness, mean=None, transpose=None):
 
         mb_idx = utils.sample_idx(dataset.shape[0], cls.hypers.batch_size)
 
@@ -498,7 +499,7 @@ class Network:
         mask_batch = mask[mb_idx].detach().clone()
         # train_hint_batch = hint[mb_idx].detach().clone()
         hint_batch = generate_hint_paper_missingness(
-            mask_batch, cls.hypers.hint_rate, missingness[mb_idx]
+            mask_batch, cls.hypers.hint_rate, missingness, transpose, mb_idx
         )
 
         if mean is not None:
