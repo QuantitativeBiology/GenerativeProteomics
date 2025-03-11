@@ -53,7 +53,7 @@ Once the environment is all set up, it is important you install the following de
 - **argparse**
 - **psutil**
 
-You can install them seperately or by running the following command:
+You can install them seperately, or by running the following command:
 
 .. code-block:: bash
 
