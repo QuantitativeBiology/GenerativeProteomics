@@ -47,22 +47,35 @@ class Network:
         # print(summary(net_G))
 
     def generate_sample(cls, data, mask):
+
+        device = next(cls.net_G.parameters()).device  # Get the device of net_G
+
+        # Move tensors to the correct device
+        data = data.to(device)
+        mask = mask.to(device)
+
         dim = data.shape[1]
         size = data.shape[0]
 
-        Z = torch.rand((size, dim)) * 0.01
+        Z = torch.rand((size, dim), device = device) * 0.01
         missing_data_with_noise = mask * data + (1 - mask) * Z
         input_G = torch.cat((missing_data_with_noise, mask), 1).float()
 
         return cls.net_G(input_G)
 
     def impute(cls, data: Data):
-        sample_G = cls.generate_sample(data.dataset_scaled, data.mask)
+
+        device = next(cls.net_G.parameters()).device
+
+        data.dataset_scaled = data.dataset_scaled.to(device)
+        data.mask = data.mask.to(device)
+
+        sample_G = cls.generate_sample(data.dataset_scaled, data.mask).to(device)
         data_imputed_scaled = data.dataset_scaled * data.mask + sample_G * (
             1 - data.mask
         )
         cls.metrics.data_imputed = data.scaler.inverse_transform(
-            data_imputed_scaled.detach().numpy()
+            data_imputed_scaled.detach().cpu().numpy()
         )
 
         utils.create_csv(
@@ -72,18 +85,26 @@ class Network:
         )
 
     def _evaluate_impute(cls, data: Data):
-        sample_G = cls.generate_sample(data.ref_dataset_scaled, data.ref_mask)
+
+        device = next(cls.net_G.parameters()).device  # Get the device of net_G
+
+        data.ref_dataset_scaled = data.ref_dataset_scaled.to(device)
+        data.ref_mask = data.ref_mask.to(device)
+        data.mask = data.mask.to(device)
+
+        sample_G = cls.generate_sample(data.ref_dataset_scaled, data.ref_mask).to(device)
         data_imputed_scaled = data.ref_dataset_scaled * data.ref_mask + sample_G * (
             1 - data.ref_mask
         )
         cls.metrics.ref_data_imputed = data.scaler.inverse_transform(
-            data_imputed_scaled.detach().numpy()
+            data_imputed_scaled.detach().cpu().numpy()
         )
-
-        test_idx = torch.nonzero((data.mask - data.ref_mask) == 1)
+        
+        test_idx = torch.nonzero((data.mask - data.ref_mask) == 1).to(device)
 
         ref_imputed = np.empty((len(test_idx), 4))
         for i, id in enumerate(test_idx):
+            id = id.cpu().numpy()
             ref_imputed[i] = np.array(
                 [
                     data.dataset[tuple(id)],
@@ -100,6 +121,13 @@ class Network:
         )
 
     def _update_G(cls, batch, mask, hint, Z, loss):
+
+        device = next(cls.net_G.parameters()).device
+        batch = batch.to(device)
+        mask = mask.to(device)
+        hint = hint.to(device)
+        Z = Z.to(device)
+
         loss_mse = nn.MSELoss(reduction="none")
 
         ones = torch.ones_like(batch)
@@ -129,6 +157,14 @@ class Network:
         return loss_G
 
     def _update_D(cls, batch, mask, hint, Z, loss):
+
+        device = next(cls.net_D.parameters()).device
+
+        batch = batch.to(device)
+        mask = mask.to(device)
+        hint = hint.to(device)
+        Z = Z.to(device)
+
         new_X = mask * batch + (1 - mask) * Z
 
         input_G = torch.cat((new_X, mask), 1).float()
@@ -216,6 +252,8 @@ class Network:
 
     def evaluate(cls, data: Data, missing_header):
 
+        device = next(cls.net_D.parameters()).device
+
         dim = data.ref_dataset_scaled.shape[1]
         train_size = data.ref_dataset_scaled.shape[0]
 
@@ -233,19 +271,19 @@ class Network:
         for it in pbar:
             mb_idx = utils.sample_idx(train_size, cls.hypers.batch_size)
 
-            train_batch = data.ref_dataset_scaled[mb_idx].detach().clone()
-            train_mask_batch = data.ref_mask[mb_idx].detach().clone()
-            train_hint_batch = data.ref_hint[mb_idx].detach().clone()
-            test_batch = data.dataset_scaled[mb_idx].detach().clone()
-            test_mask_batch = data.mask[mb_idx].detach().clone()
-            Z = torch.rand((cls.hypers.batch_size, dim)) * 0.01
+            train_batch = data.ref_dataset_scaled[mb_idx].detach().clone().to(device)
+            train_mask_batch = data.ref_mask[mb_idx].detach().clone().to(device)
+            train_hint_batch = data.ref_hint[mb_idx].detach().clone().to(device)
+            test_batch = data.dataset_scaled[mb_idx].detach().clone().to(device)
+            test_mask_batch = data.mask[mb_idx].detach().clone().to(device)
+            Z = torch.rand((cls.hypers.batch_size, dim), device = device) * 0.01
             cls.metrics.loss_D_evaluate[it] = cls._update_D(
                 train_batch, train_mask_batch, train_hint_batch, Z, loss
             )
             cls.metrics.loss_G_evaluate[it] = cls._update_G(
                 train_batch, train_mask_batch, train_hint_batch, Z, loss
             )
-            sample_G = cls.generate_sample(train_batch, train_mask_batch)
+            sample_G = cls.generate_sample(train_batch, train_mask_batch).to(device)
 
             cls.metrics.loss_MSE_train_evaluate[it] = (
                 loss_mse(train_mask_batch * train_batch, train_mask_batch * sample_G)
@@ -287,6 +325,8 @@ class Network:
 
     def train(cls, data: Data, missing_header):
 
+        device = next(cls.net_G.parameters()).device  # Get the device of net_G
+
         for name, param in cls.net_D.named_parameters():
             if "weight" in name:
                 nn.init.xavier_normal_(param)
@@ -318,11 +358,11 @@ class Network:
 
             mb_idx = utils.sample_idx(train_size, cls.hypers.batch_size)
 
-            batch = data.dataset_scaled[mb_idx].detach().clone()
-            mask_batch = data.mask[mb_idx].detach().clone()
-            hint_batch = data.hint[mb_idx].detach().clone()
+            batch = data.dataset_scaled[mb_idx].detach().clone().to(device)
+            mask_batch = data.mask[mb_idx].detach().clone().to(device)
+            hint_batch = data.hint[mb_idx].detach().clone().to(device)
 
-            Z = torch.rand((cls.hypers.batch_size, dim)) * 0.01
+            Z = torch.rand((cls.hypers.batch_size, dim), device = device) * 0.01
             cls.metrics.loss_D[it] = cls._update_D(
                 batch, mask_batch, hint_batch, Z, loss
             )
@@ -333,7 +373,7 @@ class Network:
             sample_G = cls.generate_sample(batch, mask_batch)
 
             cls.metrics.loss_MSE_train[it] = (
-                loss_mse(mask_batch * batch, mask_batch * sample_G)
+                loss_mse(mask_batch * batch, mask_batch * sample_G).to(device)
             ).mean()
 
             if it % 100 == 0:

@@ -7,6 +7,8 @@ from sklearn.preprocessing import MinMaxScaler
 class Data:
     def __init__(self, dataset, miss_rate, hint_rate, ref=None):
 
+        if isinstance(dataset, torch.Tensor):
+            dataset = dataset.cpu().numpy()
         mask = np.where(np.isnan(dataset), 0.0, 1.0)
         dataset = np.where(mask, dataset, 0.0)
 

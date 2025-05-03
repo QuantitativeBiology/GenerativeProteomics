@@ -20,6 +20,18 @@ import argparse
 import os
 import psutil
 
+import torch
+print("PyTorch version:", torch.__version__)
+print("CUDA Available:", torch.cuda.is_available())
+if torch.cuda.is_available():
+    print("CUDA Device Name:", torch.cuda.get_device_name(0))
+else:
+    print("No GPU detected.")
+
+#device = torch.device('cpu')
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f"Using device: {device}")
+
 
 def init_arg():
     parser = argparse.ArgumentParser()
@@ -138,7 +150,7 @@ if __name__ == "__main__":
             nn.ReLU(),
             nn.Linear(h_dim2, dim),
             nn.Sigmoid(),
-        )
+        ).to(device)
 
         net_D = nn.Sequential(
             nn.Linear(dim * 2, h_dim1),
@@ -147,11 +159,12 @@ if __name__ == "__main__":
             nn.ReLU(),
             nn.Linear(h_dim2, dim),
             nn.Sigmoid(),
-        )
+        ).to(device)
 
         metrics = Metrics(params)
         model = Network(hypers=params, net_G=net_G, net_D=net_D, metrics=metrics)
 
+        missing = torch.tensor(missing).to(device)
         if ref_file is not None:
             df_ref = pd.read_csv(ref_file)
             ref = df_ref.values
