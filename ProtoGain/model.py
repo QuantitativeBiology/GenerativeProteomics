@@ -182,6 +182,8 @@ class Network:
 
     def train_ref(cls, data: Data, missing_header):
 
+        device = next(cls.net_G.parameters()).device
+
         dim = data.dataset_scaled.shape[1]
         train_size = data.dataset_scaled.shape[0]
 
@@ -200,12 +202,12 @@ class Network:
 
             mb_idx = utils.sample_idx(train_size, cls.hypers.batch_size)
 
-            batch = data.dataset_scaled[mb_idx].detach().clone()
-            mask_batch = data.mask[mb_idx].detach().clone()
-            hint_batch = data.hint[mb_idx].detach().clone()
-            ref_batch = data.ref_dataset_scaled[mb_idx].detach().clone()
+            batch = data.dataset_scaled[mb_idx].detach().clone().to(device)
+            mask_batch = data.mask[mb_idx].detach().clone().to(device)
+            hint_batch = data.hint[mb_idx].detach().clone().to(device)
+            ref_batch = data.ref_dataset_scaled[mb_idx].detach().clone().to(device)
 
-            Z = torch.rand((cls.hypers.batch_size, dim)) * 0.01
+            Z = torch.rand((cls.hypers.batch_size, dim), device = device) * 0.01
             cls.metrics.loss_D[it] = cls._update_D(
                 batch, mask_batch, hint_batch, Z, loss
             )
@@ -213,7 +215,7 @@ class Network:
                 batch, mask_batch, hint_batch, Z, loss
             )
 
-            sample_G = cls.generate_sample(batch, mask_batch)
+            sample_G = cls.generate_sample(batch, mask_batch).to(device)
 
             cls.metrics.loss_MSE_train[it] = (
                 loss_mse(mask_batch * batch, mask_batch * sample_G)
