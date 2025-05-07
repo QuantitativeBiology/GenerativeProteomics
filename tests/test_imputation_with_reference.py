@@ -102,12 +102,8 @@ class TestImputation(unittest.TestCase):
             file1 = pd.read_csv(".imputed.csv")
             file2 = pd.read_csv("output_with_reference.csv")
 
-            if file1.equals(file2):
-                print("Imputation successful.")
-            else:
-                print("Imputation failed.")
-
-            self.assertTrue(os.path.exists(".imputed.csv"), "Imputed file was not created.")
+            np.testing.assert_array_equal(file1, file2, "Imputation performed successfully")
+      
         except Exception as e:
             self.fail(f"Imputation failed with exception: {e}")
 

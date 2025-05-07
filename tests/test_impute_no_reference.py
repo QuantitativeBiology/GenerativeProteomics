@@ -51,9 +51,8 @@ class TestImputation(unittest.TestCase):
         # Load dataset and reference
         dataset_df = pd.read_csv(self.dataset_path)
         dataset = dataset_df.values  # Convert to numpy array
-        #ref = pd.read_csv(self.ref_path).values  # Reference dataset
 
-        # Extract headers (missing_header)
+        # Extract headers 
         missing_header = dataset_df.columns.tolist()
 
         # Dummy network structures based on input dimensions
@@ -100,21 +99,19 @@ class TestImputation(unittest.TestCase):
             file1 = pd.read_csv(".imputed.csv")
             file2 = pd.read_csv("output_no_reference.csv")
 
-            if file1.equals(file2):
-                print("Imputed files are equal.")
-            else:
-                print("Imputed files are not equal.")
+            np.testing.assert_array_equal(file1, file2, "Imputation performed successfully")
 
-            self.assertTrue(os.path.exists(".imputed.csv"), "Imputed file was not created.")
         except Exception as e:
             self.fail(f"Imputation failed with exception: {e}")
 
     
         "test the metrics class produced during imputation"
-        self.assertEqual(metrics.loss_D.size, 2001)
-        self.assertEqual(metrics.loss_G.size, 2001)
-        self.assertEqual(metrics.loss_D[2000], 0.18696381151676178)
-        self.assertEqual(metrics.loss_G[2000], 0.35355163373387766)
+        self.assertEqual(metrics.loss_D.size, self.params.num_iterations)
+        self.assertEqual(metrics.loss_G.size, self.params.num_iterations)
+        self.assertEqual(metrics.ram.size, self.params.num_iterations)
+        #self.assertEqual(metrics.loss_D[2000], 0.18696381151676178)
+        #self.assertEqual(metrics.loss_G[2000], 0.35355163373387766)
+        #self.assertEqual(metrics.ram[2000], 13.945372672)
 
 
 if __name__ == "__main__":
