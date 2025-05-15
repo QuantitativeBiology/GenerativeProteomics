@@ -462,8 +462,10 @@ class Network:
         pbar = tqdm(range(cls.hypers.num_iterations))
         for it in pbar:
 
+            mb_idx = utils.sample_idx(data_train.shape[0], cls.hypers.batch_size)
+
             batch, mask_batch, hint_batch = cls._create_batch(
-                data_train, mask_train, missingness, transpose
+                data_train, mask_train, missingness, mb_idx, transpose
             )
 
             cls._calculate_losses_train(it, batch, mask_batch, hint_batch)
