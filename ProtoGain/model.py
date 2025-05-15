@@ -376,12 +376,16 @@ class Network:
         pbar = tqdm(range(cls.hypers.num_iterations))
         for it in pbar:
 
+            mb_idx = utils.sample_idx(data_train.shape[0], cls.hypers.batch_size)
+
             train_batch, train_mask_batch, train_hint_batch, mean_batch = (
-                cls._create_batch(data_train, mask_train, missingness, mean, transpose)
+                cls._create_batch(
+                    data_train, mask_train, missingness, mb_idx, mean, transpose
+                )
             )
 
             test_batch, test_mask_batch, _, _ = cls._create_batch(
-                data_test, mask_test, missingness, mean, transpose
+                data_test, mask_test, missingness, mb_idx, mean, transpose
             )
 
             sample_G = cls.generate_sample(train_batch, train_mask_batch)
@@ -491,9 +495,11 @@ class Network:
                 cls.hypers.override,
             )
 
-    def _create_batch(cls, dataset, mask, missingness, mean=None, transpose=None):
+    def _create_batch(
+        cls, dataset, mask, missingness, mb_idx, mean=None, transpose=None
+    ):
 
-        mb_idx = utils.sample_idx(dataset.shape[0], cls.hypers.batch_size)
+        # mb_idx = utils.sample_idx(dataset.shape[0], cls.hypers.batch_size)
 
         data_batch = dataset[mb_idx].detach().clone()
         mask_batch = mask[mb_idx].detach().clone()

@@ -22,6 +22,8 @@ class Params:
         override=0,
         output_all=0,
         miss_forest=0,
+        mnar=0,
+        sigma=0.15,
     ):
         self.input = input
         self.output = output
@@ -39,6 +41,8 @@ class Params:
         self.override = override
         self.output_all = output_all
         self.miss_forest = miss_forest
+        self.mnar = mnar
+        self.sigma = sigma
 
     @staticmethod
     def _read_json(json_file):
@@ -69,6 +73,8 @@ class Params:
         override = params["override"]
         output_all = params["output_all"]
         miss_forest = params["miss_forest"]
+        mnar = params["mnar"]
+        sigma = params["sigma"]
 
         return cls(
             input,
@@ -87,6 +93,8 @@ class Params:
             override,
             output_all,
             miss_forest,
+            mnar,
+            sigma,
         )
 
     def update_hypers(self, **kwargs):

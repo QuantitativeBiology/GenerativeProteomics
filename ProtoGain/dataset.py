@@ -69,7 +69,10 @@ class Data:
             self.ref_dataset_scaled = torch.from_numpy(ref_dataset_scaled)
             self.ref_missingness = torch.from_numpy(ref_missingness)
         else:
-            self._create_ref(params, axis)
+            if params.mnar == 1:
+                self._create_ref_mnar(params, axis)
+            else:
+                self._create_ref(params, axis)
 
         print("\nNumber of samples:", self.dataset.shape[0])
         print("Number of features:", self.dataset.shape[1])
@@ -128,6 +131,61 @@ class Data:
             cls.ref_MF_imputed = cls.ref_MF_imputed_T.T
             cls.ref_MF_scaled = cls.ref_MF_scaled_T.T
 
+    def _create_ref_mnar(cls, params: Params, axis):
+
+        df_dummy = cls.dataset.detach().clone()
+        df_dummy = np.where(cls.mask, df_dummy, np.nan)
+        df_dummy = torch.tensor(df_dummy)
+
+        q = torch.quantile(df_dummy[~torch.isnan(df_dummy)], params.miss_rate).item()
+        mu, sigma = q, params.sigma
+        m, n = df_dummy.shape
+        gaussian_data = np.random.normal(mu, sigma, m * n)
+
+        gaussian_matrix = gaussian_data.reshape(m, n)
+        gaussian_matrix = torch.from_numpy(gaussian_matrix)
+
+        cls.ref_dataset = np.where(df_dummy <= gaussian_matrix, np.nan, df_dummy)
+        cls.ref_dataset = pd.DataFrame(cls.ref_dataset)
+
+        cls.ref_mask = np.where(np.isnan(cls.ref_dataset), 0.0, 1.0)
+
+        if axis == "columns":
+            cls.ref_dataset = cls.ref_dataset.fillna(cls.ref_dataset.mean(axis=0))
+            cls.ref_dataset = cls.ref_dataset.fillna(0)
+            cls.ref_missingness = 1 - cls.ref_mask.mean(axis=0)
+        elif axis == "rows":
+            cls.ref_dataset = cls.ref_dataset.T.fillna(cls.ref_dataset.mean(axis=1))
+            cls.ref_dataset = cls.ref_dataset.T.fillna(0)
+            cls.ref_dataset = cls.ref_dataset.T
+            cls.ref_missingness = 1 - cls.ref_mask.mean(axis=1)
+
+        cls.ref_dataset = torch.tensor(cls.ref_dataset.values)
+        cls.ref_mask = torch.tensor(cls.ref_mask)
+
+        cls.ref_mean_imputed = cls.ref_dataset.detach().clone()
+
+        cls.ref_dataset_scaled = torch.from_numpy(cls.scaler.transform(cls.ref_dataset))
+        cls.ref_mean_scaled = torch.from_numpy(
+            cls.scaler.transform(cls.ref_mean_imputed)
+        )
+
+        cls.ref_mean_imputed_T = cls.ref_mean_imputed.T
+        cls.ref_mean_scaled_T = cls.ref_mean_scaled.T
+        cls.ref_dataset_T = cls.ref_dataset.T
+        cls.ref_mask_T = cls.ref_mask.T
+        cls.ref_dataset_scaled_T = cls.ref_dataset_scaled.T
+
+        if params.miss_forest == 1:
+            cls.ref_MF_imputed_T = cls.MF_impute()
+
+            cls.ref_MF_scaled_T = torch.from_numpy(
+                cls.scaler.transform(cls.ref_MF_imputed_T.T)
+            ).T
+
+            cls.ref_MF_imputed = cls.ref_MF_imputed_T.T
+            cls.ref_MF_scaled = cls.ref_MF_scaled_T.T
+
     def MF_impute(cls):
         mf = MissForest()
 
@@ -136,13 +194,13 @@ class Data:
 
         X = pd.DataFrame(X)
 
-        print(X, cls.ref_mask_T)
+        # print(X, cls.ref_mask_T)
 
         print("\nStarted MF\n")
         imputed = mf.fit_transform(X)
 
-        print(imputed)
-        print(torch.from_numpy(imputed.values))
+        # print(imputed)
+        # print(torch.from_numpy(imputed.values))
         return torch.from_numpy(imputed.values)
 
 

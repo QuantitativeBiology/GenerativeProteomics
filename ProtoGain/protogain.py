@@ -26,6 +26,9 @@ torch.manual_seed(42)
 np.random.seed(42)
 
 
+#### TO DO: maybe everything related to read and parse arguments should be a in separate class
+
+
 def init_arg():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", help="path to missing data")
@@ -57,6 +60,16 @@ def init_arg():
 
     parser.add_argument(
         "--missforest", type=int, default=0, help="use MissForest for comparison"
+    )
+
+    parser.add_argument(
+        "--mnar", type=int, default=0, help="use MNAR mechanism for missingness"
+    )
+    parser.add_argument(
+        "--sigma",
+        type=float,
+        default=0.15,
+        help="Variance for the Gaussian used for MNAR",
     )
 
     ##### Specific for multiple_runs Yasset #####
@@ -95,6 +108,8 @@ if __name__ == "__main__":
     override = args.override
     output_all = args.outall
     miss_forest = args.missforest
+    mnar = args.mnar
+    sigma = args.sigma
 
     project = args.project
     cores = args.cores
@@ -131,6 +146,8 @@ if __name__ == "__main__":
         override = params.override
         output_all = params.output_all
         miss_forest = params.miss_forest
+        mnar = params.mnar
+        sigma = params.sigma
 
         project = args.project
         cores = args.cores
@@ -153,6 +170,8 @@ if __name__ == "__main__":
             override,
             output_all,
             miss_forest,
+            mnar,
+            sigma,
         )
 
     if not os.path.exists(params.output_folder):
@@ -230,7 +249,7 @@ if __name__ == "__main__":
 
         data = Data(missing, params, axis="columns")
 
-        model.evaluation_run(data, missing_header, transpose=0)
+        # model.evaluation_run(data, missing_header, transpose=0)
         # model.train(data, missing_header, transpose=0)
 
         ################ Starting Transpose run ################
