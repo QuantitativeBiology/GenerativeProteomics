@@ -19,8 +19,9 @@ def test_network():
 if __name__ == "__main__":
     # Load the dataset
     args = test_network()
+    dataset_path = "PXD004452-8c3d7d43-b1e7-4a36-a430-23e41bcbe07c.absolute.tsv"  # Input dataset with missing values
     if args.model is None :
-        dataset_path = "PXD004452-8c3d7d43-b1e7-4a36-a430-23e41bcbe07c.absolute.tsv"  # Input dataset with missing values
+        #dataset_path = "PXD004452-8c3d7d43-b1e7-4a36-a430-23e41bcbe07c.absolute.tsv"  # Input dataset with missing values
         ref_path = None  # Reference complete dataset
         
         # Load dataset and reference
