@@ -19,6 +19,58 @@ If you want to have more information and feedback from the test, you should use 
       python -m unittest -v <name_of_the_test_file>
 
 
+
+Additinally, if you want to run the entire battery of tests all at once, you can use the following command:
+
+.. code-block:: bash
+
+    python -m unittest discover 
+
+
+Test Coverage
+----------------------
+
+One of the most import aspects of unit testing is the test coverage.
+Test coverage is a measure of how much of your code is being tested by your unit tests.
+It is important to have a high test coverage, as it ensures that your code is being tested thoroughly and that there are no bugs in your code.
+
+In order to address this, you can use the coverage package, which is a tool for measuring code coverage of your tests.
+
+To install the coverage package, you can use the following command:
+
+.. code-block:: bash
+
+    pip install coverage
+
+To run the tests with coverage, you can use the following command:
+
+.. code-block:: bash
+
+    coverage run -m unittest <name_of_the_test_file>
+
+Just like before, if you intend to run all the unittest at once, you can use the following command:
+
+.. code-block:: bash
+
+    coverage run -m unittest discover
+
+After running the test, if you want to see the coverage report, you can use the following command:
+
+.. code-block:: bash
+
+    coverage report
+
+This report will write in your terminal the coverage of each file and the overall coverage of your project.
+
+If you want an even more detail assessment of the coverage, you can use the following command:
+
+.. code-block:: bash
+
+    coverage html
+
+This command will create a html file in the htmlcov folder, which you can open in your browser and see the coverage of each file,
+the lines that were executed and the lines that were not executed.
+
 Test_generate_reference
 --------------------------------------
 
