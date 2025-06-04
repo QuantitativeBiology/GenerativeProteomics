@@ -71,6 +71,7 @@ If you want an even more detail assessment of the coverage, you can use the foll
 This command will create a html file in the htmlcov folder, which you can open in your browser and see the coverage of each file,
 the lines that were executed and the lines that were not executed.
 
+
 Test_generate_reference
 --------------------------------------
 
