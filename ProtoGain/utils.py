@@ -139,3 +139,21 @@ def build_protein_matrix(tsv_file):
     # print("Missing Rate (%)", matrix.isna().sum().sum() / matrix.size * 100)
 
     return matrix
+
+
+def build_protein_matrix_from_anndata(anndata_file)  -> pd.DataFrame:
+    """
+        An anndata file has the .h5ad extension.
+    """
+
+    adata = ad.read_h5ad('../../HeLa_datasets_combined.h5ad')
+
+    data = pd.DataFrame(
+        adata.X,
+        index=adata.obs["SampleID"],
+        columns=adata.var["ProteinName"]
+    )
+
+    data = data.T
+
+    return data
