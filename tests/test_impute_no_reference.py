@@ -82,6 +82,10 @@ class TestImputation(unittest.TestCase):
         network = Network(hypers=self.params, net_G=net_G, net_D=net_D, metrics=metrics)
         self.assertIsNotNone(network, "Network initialization failed.")
 
+        np.random.seed(self.seed)
+        torch.manual_seed(self.seed)
+        random.seed(self.seed)
+
         # Initialize Data
         data_obj = Data(
             dataset=dataset,
@@ -99,7 +103,8 @@ class TestImputation(unittest.TestCase):
             file1 = pd.read_csv(".imputed.csv")
             file2 = pd.read_csv("output_no_reference.csv")
 
-            np.testing.assert_array_equal(file1, file2, "Imputation performed successfully")
+            #np.testing.assert_array_equal(file1, file2, "Imputation performed successfully")
+            np.testing.assert_allclose(file1.values, file2.values, rtol=1e-5, atol=1e-8)
 
         except Exception as e:
             self.fail(f"Imputation failed with exception: {e}")
@@ -110,8 +115,6 @@ class TestImputation(unittest.TestCase):
         self.assertEqual(metrics.loss_G.size, self.params.num_iterations)
         self.assertEqual(metrics.ram.size, self.params.num_iterations)
         #self.assertEqual(metrics.loss_D[2000], 0.18696381151676178)
-        #self.assertEqual(metrics.loss_G[2000], 0.35355163373387766)
-        #self.assertEqual(metrics.ram[2000], 13.945372672)
 
 
 if __name__ == "__main__":

@@ -86,6 +86,10 @@ class TestImputation(unittest.TestCase):
         network = Network(hypers=self.params, net_G=net_G, net_D=net_D, metrics=metrics)
         self.assertIsNotNone(network, "Network initialization failed.")
 
+        np.random.seed(self.seed)
+        torch.manual_seed(self.seed)
+        random.seed(self.seed)
+
         # Initialize Data
         data_obj = Data(
             dataset = dataset,
