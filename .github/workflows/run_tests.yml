@@ -25,4 +25,4 @@ jobs:
       - name: Run tests
         run: |
           python -m unittest discover 
-        working-directory: ./tests
+        working-directory: ./tests  # Adjust this path to where your tests are located
