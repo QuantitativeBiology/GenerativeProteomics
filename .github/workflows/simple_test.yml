@@ -1,0 +1,14 @@
+name: Simple Test
+
+on:
+  workflow_dispatch:  # allows manual trigger
+
+jobs:
+  simple-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run Test
+        run: echo "Test workflow trigger"
