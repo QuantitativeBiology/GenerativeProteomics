@@ -1,23 +1,23 @@
 name: Run Tests on Schedule
 
-# Trigger the workflow on a schedule (every X days)
+
 on:
   schedule:
     - cron: '0 0 */1 * *'  
-  workflow_dispatch:  # This allows manual triggers from the GitHub UI
+  workflow_dispatch:  
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # You can change this to macOS or Windows if needed
+    runs-on: ubuntu-latest  
 
     steps:
       - name: Checkout the code from the repository
-        uses: actions/checkout@v2  # This checks out the repository code
+        uses: actions/checkout@v2  
 
       - name: Set up Python 
         uses: actions/setup-python@v2
         with:
-          python-version: '3.11'  # Specify the Python version you are using
+          python-version: '3.11'  
 
       - name: Install dependencies
         run: |
@@ -26,4 +26,4 @@ jobs:
       - name: Run tests
         run: |
           python -m unittest discover 
-        working-directory: ./tests  # Adjust this path to where your tests are located
+        working-directory: ./tests  
