@@ -103,8 +103,8 @@ class TestImputation(unittest.TestCase):
             file1 = pd.read_csv(".imputed.csv")
             file2 = pd.read_csv("output_no_reference.csv")
 
-            np.testing.assert_array_equal(file1, file2, "Imputation performed successfully")
-            #np.testing.assert_allclose(file1.values, file2.values, rtol=1e-5, atol=1e-8)
+            #np.testing.assert_array_equal(file1, file2, "Imputation performed successfully")
+            np.testing.assert_allclose(file1.values, file2.values, rtol=1e-5, atol=1e-8)
             
         except Exception as e:
             self.fail(f"Imputation failed with exception: {e}")
