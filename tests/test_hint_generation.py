@@ -32,7 +32,7 @@ class TestImputation(unittest.TestCase):
         create_csv(file1, "hint_matrix", missing_header)
     
         output = pd.read_csv("output_hint.csv")
-        np.testing.assert_array_equal(file1, output.values, "Hint matrix generated successfully")
+        np.testing.assert_array_equal(file1, output.values, "Hint matrix does not match expected output")
 
 
 if __name__ == "__main__":

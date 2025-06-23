@@ -46,7 +46,7 @@ class TestImputation(unittest.TestCase):
         create_csv(df_reference, "reference_generated", missing_header)
          
         output = pd.read_csv("output_generation_reference.csv")
-        np.testing.assert_array_equal(df_reference, output.values, "Reference Dataset generated successfully")
+        np.testing.assert_array_equal(df_reference, output.values, "Reference Dataset does not match expected output")
 
 
 
