@@ -30,6 +30,7 @@ from GenerativeProteomics.utils import (
     output,
     sample_idx,
     build_protein_matrix,
+    build_protein_matrix_from_anndata
 )
 
 # Define the public API for the package
@@ -60,4 +61,5 @@ __all__ = [
     "output",
     "sample_idx",
     "build_protein_matrix",
+    "build_protein_matrix_from_anndata",
 ]

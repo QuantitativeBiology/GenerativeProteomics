@@ -1,11 +1,7 @@
-#import ProtoGain
-
-# Call some method that produces an output
-#args = ProtoGain.init_arg()
-#print(f"Initialized arguments: {args}")
 
 from GenerativeProteomics import create_csv  
 from GenerativeProteomics import sample_idx
+from GenerativeProteomics.utils import build_protein_matrix_from_anndata
 
 data = [
     [1, 2, 3],

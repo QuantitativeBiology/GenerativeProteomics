@@ -6,13 +6,13 @@ with open("README.md", 'r') as f:
 
 setup(
     name="GenerativeProteomics",
-    version="0.1.0",
+    version="0.2.1",
     author="Diogo Ferreira, Emanuel Gonçalves, Jorge Ribeiro, Leandro Sobral, Rita Gama",  
     author_email="quantitative-biology@googlegroups.com",  
     description="A Python package for synthetic proteomics data augmentation using ProtoGAIN",
     long_description=description,  # Use the content of README.md
     long_description_content_type="text/markdown",  # Markdown format for PyPI rendering
-    url="https://github.com/QuantitativeBiology/ProtoGain",  # Replace with your GitHub repository URL
+    url="https://github.com/QuantitativeBiology/GenerativeProteomics",  # Replace with your GitHub repository URL
     packages=find_packages(),  # Automatically find all packages (like 'protogain')
     install_requires=[
         "torch",
@@ -23,6 +23,7 @@ setup(
         "scikit-learn",
         "optuna",
         "psutil",
+        "anndata",  # For handling AnnData objects
     ],  
     classifiers=[
         "Programming Language :: Python :: 3.10",
