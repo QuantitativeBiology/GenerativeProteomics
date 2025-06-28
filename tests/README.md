@@ -62,3 +62,15 @@ For a more detailed insight, use this command, which will create and html file t
 ```bash
 coverage html
 ```
+
+## Expected Output 
+
+If, after running a test or a set of tests appears **OK** on the terminal, it is because they were successfully executed.
+Otherwise, if it appears **FAIL**, it is because the tests have failed and there is something wrong.
+When a test fails, additional information about the bug is also printed in the terminal, in order to give you some extra insight on what is wrong.
+You can also use the verbose flag, which will give you more information about the tests that were ran.
+To do so, you just need to run the following command:
+
+```bash 
+python -m unittest -v <name_of_test>
+```
