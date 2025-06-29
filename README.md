@@ -1,4 +1,4 @@
-# ProtoGain
+# Generative Proteomics
 
 [![PyPi Version](https://img.shields.io/pypi/v/GenerativeProteomics?label=PyPi&color=blue&style=flat&logo=pypi)](https://pypi.org/project/GenerativeProteomics/)
 [![Colab](https://img.shields.io/badge/Google_Colab-0061F2?style=flat&logo=googlecolab&color=blue&label=Colab&colorB=grey)](https://colab.research.google.com/drive/1a-DfiAtPqmU2AnfMS-plDuTkZOfQ_zrB?usp=sharing)
@@ -16,7 +16,23 @@ In this repository you may find a PyTorch implementation of Generative Adversari
 
 ## Installation
 
-1. Clone this repository:  `git clone https://github.com/QuantitativeBiology/ProtoGain/`
+### Pip install
+
+We have submitted a package to the Python Package Index (PyPI) for easy installation. You can install the package using the following command:
+
+```bash
+pip install GenerativeProteomics
+```
+
+This way, you can install the package and its dependencies in one go.
+
+After that, you can import all the functions and classes from the package of the model and use them in your code.
+
+### GitHub
+
+If you prefer to use the code of the GenerativeProteomics model directly, you can access it in our GitHub repository and follow the next sequence of commands.
+
+1. Clone this repository:  `git clone https://github.com/QuantitativeBiology/GenerativeProteomics/`
 2. Create a Python environment: `conda create -n proto python=3.10` if you have conda installed
 3. Activate the previously created environment: `conda activate proto`
 4. Install the necessary packages: `pip install -r libraries.txt`
@@ -24,7 +40,7 @@ In this repository you may find a PyTorch implementation of Generative Adversari
 
 ## How to Use
 
-If you just want to impute a general dataset, the most straightforward and simplest way to run ProtoGain is to run: `python protogain.py -i /path/to/file_to_impute.csv`
+If you just want to impute a general dataset, the most straightforward and simplest way to run GenerativeProteomics is to run: `python protogain.py -i /path/to/file_to_impute.csv`
 Running in this manner will result in two separate training phases.
 
 1) Evaluation run: In this run a percentage of the values (10% by default) are concealed during the training phase and then the dataset is imputed. The RMSE is calculated with those hidden values as targets and at the end of the training phase a `test_imputed.csv` file will be created containing the original hidden values and the resulting imputation, this way you can have an estimation of the imputation accuracy.
