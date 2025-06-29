@@ -1,13 +1,6 @@
-from GenerativeProteomics import utils
-from GenerativeProteomics import Network
-from GenerativeProteomics import Params
-from GenerativeProteomics import Metrics
-from GenerativeProteomics import Data
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, PretrainedConfig
+from GenerativeProteomics import utils , Network, Params, Metrics, Data
 import torch
 import argparse
-import os
-
 
 def test_network():
     """ Test to showcase how to import and use the classes and functions of the GenerativeProteomics package. """
@@ -17,16 +10,16 @@ def test_network():
     return parser.parse_args()
 
 if __name__ == "__main__":
+    
     # Load the dataset
     args = test_network()
-    dataset_path = "PXD004452-8c3d7d43-b1e7-4a36-a430-23e41bcbe07c.absolute.tsv"  # Input dataset with missing values
+    dataset_path = "PXD004452-8c3d7d43-b1e7-4a36-a430-23e41bcbe07c.absolute.tsv"  
     if args.model is None :
-        #dataset_path = "PXD004452-8c3d7d43-b1e7-4a36-a430-23e41bcbe07c.absolute.tsv"  # Input dataset with missing values
-        ref_path = None  # Reference complete dataset
+        ref_path = None 
         
         # Load dataset and reference
         dataset_df = utils.build_protein_matrix(dataset_path)
-        dataset = dataset_df.values  # Convert to numpy array
+        dataset = dataset_df.values 
 
         
         # Extract headers (missing_header)
@@ -79,7 +72,7 @@ if __name__ == "__main__":
             dataset=dataset,
             miss_rate=0.2,
             hint_rate=0.9,
-            ref = None  # Provide reference if available
+            ref = None 
         )
         
         # Perform training (imputation)
@@ -91,27 +84,6 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Error during imputation: {e}")
 
-    else:
-        model_name =  args.model
-        print(model_name)
-        try:
-            # Load the tokenizer and model
-            #the tokenizer preprocesses the input text so it can be understood by the model
-            tokenizer = AutoTokenizer.from_pretrained(model_name)
-            model = AutoModelForSequenceClassification.from_pretrained(model_name)
-        except (OSError, PretrainedConfig) as e:
-            print(f"Could not load model: {e}")
-            exit(1)
-
-        # Save the model and tokenizer
-        save_dir = "./saved_model"
-        os.makedirs(save_dir, exist_ok=True)
-        tokenizer.save_pretrained(save_dir)
-        model.save_pretrained(save_dir)
-        print(f"Model and tokenizer saved to {save_dir}")
-
-
-        #-------------------------------- ADD CODE FOR PRE-TRAINED MODEL HERE ------------------------------
 
 
 
