@@ -8,3 +8,4 @@ optuna
 argparse
 psutil
 anndata
+polars
