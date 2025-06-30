@@ -124,7 +124,6 @@ if __name__ == "__main__":
         else:
             print("Invalid file format")
             exit(2)
-
         dim = missing.shape[1]
         train_size = missing.shape[0]
 

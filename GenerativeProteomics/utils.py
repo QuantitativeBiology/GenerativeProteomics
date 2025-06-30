@@ -2,6 +2,8 @@ import torch
 import numpy as np
 import pandas as pd
 import os
+import anndata as ad
+import polars as pl
 
 
 def create_csv(data, name: str, header):
@@ -157,3 +159,14 @@ def build_protein_matrix_from_anndata(anndata_file)  -> pd.DataFrame:
     data = data.T
 
     return data
+
+def handle_parquet(parquet_file):
+
+    df = pl.read_parquet(parquet_file)
+    #df_pandas = df.to_pandas()
+    df_numeric = df.select(pl.col(pl.Float64, pl.Int64, pl.Int32, pl.Float32))
+
+    #numeric_cols = df_pandas.select_dtypes(include=[np.number])
+    #dataset = numeric_cols.to_numpy(dtype=np.float32)
+
+    return df_numeric

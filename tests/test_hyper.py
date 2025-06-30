@@ -5,7 +5,7 @@ from tempfile import NamedTemporaryFile
 import sys 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from ProtoGain.hypers import Params 
+from GenerativeProteomics.hypers import Params 
 
 class TestParams(unittest.TestCase):
     
