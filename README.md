@@ -40,7 +40,7 @@ If you prefer to use the code of the GenerativeProteomics model directly, you ca
 
 ## How to Use
 
-If you just want to impute a general dataset, the most straightforward and simplest way to run GenerativeProteomics is to run: `python protogain.py -i /path/to/file_to_impute.csv`
+If you just want to impute a general dataset, the most straightforward and simplest way to run GenerativeProteomics is to run: `python generativeproteomics.py -i /path/to/file_to_impute.csv`
 Running in this manner will result in two separate training phases.
 
 1) Evaluation run: In this run a percentage of the values (10% by default) are concealed during the training phase and then the dataset is imputed. The RMSE is calculated with those hidden values as targets and at the end of the training phase a `test_imputed.csv` file will be created containing the original hidden values and the resulting imputation, this way you can have an estimation of the imputation accuracy.
@@ -48,10 +48,10 @@ Running in this manner will result in two separate training phases.
 2) Imputation run: Then a proper training phase takes place using the entire dataset. An `imputed.csv` file will be created containing the imputed dataset.
 
 
-However, there are a few arguments which you may want to change. You can do this using a parameters.json file (you may find an example in `ProtoGain/breast/parameters.json`) or you can choose them directly in the command line.
+However, there are a few arguments which you may want to change. You can do this using a parameters.json file (you may find an example in `GenerativeProteomics/breast/parameters.json`) or you can choose them directly in the command line.
 
-Run with a parameters.json file: `python protogain.py --parameters /path/to/parameters.json`<br>
-Run with command line arguments: `python protogain.py -i /path/to/file_to_impute.csv -o imputed_name --ofolder ./results/ --it 2001`
+Run with a parameters.json file: `python generativeproteomics.py --parameters /path/to/parameters.json`<br>
+Run with command line arguments: `python generativeproteomics.py -i /path/to/file_to_impute.csv -o imputed_name --ofolder ./results/ --it 2001`
 
 #### Arguments:
 
@@ -65,7 +65,7 @@ Run with command line arguments: `python protogain.py -i /path/to/file_to_impute
 
 
 
-If you want to test the efficacy of the code you may give a reference file containing a complete version of the dataset (without missing values): `python protogain.py -i /path/to/file_to_impute.csv --ref /path/to/complete_dataset.csv`
+If you want to test the efficacy of the code you may give a reference file containing a complete version of the dataset (without missing values): `python generativeproteomics.py -i /path/to/file_to_impute.csv --ref /path/to/complete_dataset.csv`
 
 Running this way will calculate the RMSE of the imputation in relation to the complete dataset.
 
@@ -78,8 +78,8 @@ In this repository you may find a folder named `breast`, inside it you have a br
 `breastMissing_20.csv`: the same dataset but with 20% of its values taken out
 
 
-To simply impute `breastMissing_20.csv` run: `python protogain.py -i ./breast/breastMissing_20.csv` <br>
-If you want to compare the imputation with the original dataset run: `python protogain.py -i ./breast/breastMissing_20.csv --ref ./breast/breast.csv` or `python protogain.py --parameters ./breast/parameters.json`
+To simply impute `breastMissing_20.csv` run: `python generativeproteomics.py -i ./breast/breastMissing_20.csv` <br>
+If you want to compare the imputation with the original dataset run: `python generativeproteomics.py -i ./breast/breastMissing_20.csv --ref ./breast/breast.csv` or `python generativeproteomics.py --parameters ./breast/parameters.json`
 
 
 If you want to go deep in the analysis of every metric you either set `--outall` to `1` or you run the code in an IPython console, this way you can access every variable you want in the `metrics` object, e.g. `metrics.loss_D`.
