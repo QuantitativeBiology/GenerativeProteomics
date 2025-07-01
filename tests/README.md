@@ -40,7 +40,7 @@ Additionally, if you want to check the coverage of the tests too, you can use th
 
 First, you install it with:
 ```bash 
-pip install converage
+pip install coverage
 ```
 
 Then, to use it on a specific test, run the following command:
