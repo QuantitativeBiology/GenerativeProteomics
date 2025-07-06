@@ -1,11 +1,11 @@
-GenerativeProteomics
-====================
+# GenerativeProteomics
+
 
 In this first part, we will show in a simple and clear way how to install and use `GenerativeProteomics` 
 to perform imputation of missing values of proteomics' datasets.
 
-Installation
--------------
+## Installation
+
 
 `GenerativeProteomics` is a Python package for imputation of missing values in the field of proteomics. 
 It is currently based on the `Generative Adversarial Imputation Network (GAIN)` architecture.
@@ -32,8 +32,7 @@ which are the following :
 - **psutil**
 - **anndata**
 
-Input
------
+## Input
 
 The package is designed to work with datasets that have missing values, specifically in the context of proteomics.
 The input dataset should be in a tabular format, such as a CSV or TSV file.
@@ -41,22 +40,21 @@ You can also provide a reference dataset, which is a complete dataset without mi
 
 It is important to mention that you can define the hyperparameters of the model.
 
-    - input (path to the input dataset)
-    - output (path to the output dataset)
-    - ref (path to the reference dataset, None if not existent)
-    - output_folder (path to the folder where the output files will be saved)
-    - num_iterations (number of iterations for training the model)
-    - batch_size (size of the batch for training)
-    - alpha (weight for the Generator loss)
-    - miss_rate (missing rate of the dataset, default is 0.1)
-    - hint_rate (rate of hints to be used in the model, default is 0.9)
-    - lr_D (learning rate for the Discriminator, default is 0.001)
-    - lr_G (learning rate for the Generator, default is 0.001)
-    - override (boolean to override the output folder if it already exists, default is False)
-    - output_all (boolean to output all the files, default is False)
+- input (path to the input dataset)
+- output (path to the output dataset)
+- ref (path to the reference dataset, None if not existent)
+- output_folder (path to the folder where the output files will be saved)
+- num_iterations (number of iterations for training the model)
+- batch_size (size of the batch for training)
+- alpha (weight for the Generator loss)
+- miss_rate (missing rate of the dataset, default is 0.1)
+- hint_rate (rate of hints to be used in the model, default is 0.9)
+- lr_D (learning rate for the Discriminator, default is 0.001)
+- lr_G (learning rate for the Generator, default is 0.001)
+- override (boolean to override the output folder if it already exists, default is False)
+- output_all (boolean to output all the files, default is False)
 
-Contents
---------
+## Contents
 
 The package allows you to import and use the following classes, with each one of them having a specific 
 role in the imputation process :
@@ -105,8 +103,7 @@ role in the imputation process :
             - build_protein_matrix()
             - build_protein_matrix_from_anndata()
 
-Example
-=======
+## Example
 
 In this use-case, you can find a file that showcases how to import and use the functions and classes of GenerativeProteomics.
 This file is called `test.py` and it performs the imputation of missing values on a dataset of proteins from PRIDE.
@@ -120,8 +117,8 @@ To run the file with the PRIDE dataset, you can use the following command:
     python test.py 
 
 
-Expected Output
----------------
+## Expected Output
+
 
 The imputation model produces several forms of output.
 Throughout the imputation process, the model updates on the terminal the progress of the process and 
