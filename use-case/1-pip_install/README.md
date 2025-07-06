@@ -13,9 +13,9 @@ To use the package, you need to have `Python 3.10` or `Python 3.11` on your syst
 To do that, you can create a conda environment, for example.
 The package is available on `PyPI` and can be installed using a `pip` command (GenerativeProteomics 0.2.1).
 
-.. code-block:: bash  
-
-    pip install GenerativeProteomics     
+```bash  
+    pip install GenerativeProteomics 
+```
 
   
 By running the pip command, you are also installing all the dependencies required by the package, 
@@ -40,19 +40,19 @@ You can also provide a reference dataset, which is a complete dataset without mi
 
 It is important to mention that you can define the hyperparameters of the model.
 
-- input (path to the input dataset)
-- output (path to the output dataset)
-- ref (path to the reference dataset, None if not existent)
-- output_folder (path to the folder where the output files will be saved)
-- num_iterations (number of iterations for training the model)
-- batch_size (size of the batch for training)
-- alpha (weight for the Generator loss)
-- miss_rate (missing rate of the dataset, default is 0.1)
-- hint_rate (rate of hints to be used in the model, default is 0.9)
-- lr_D (learning rate for the Discriminator, default is 0.001)
-- lr_G (learning rate for the Generator, default is 0.001)
-- override (boolean to override the output folder if it already exists, default is False)
-- output_all (boolean to output all the files, default is False)
+- **input** (path to the input dataset)
+- **output** (path to the output dataset)
+- **ref** (path to the reference dataset, None if not existent)
+- **output_folder** (path to the folder where the output files will be saved)
+- **num_iterations** (number of iterations for training the model)
+- **batch_size** (size of the batch for training)
+- **alpha** (weight for the Generator loss)
+- **miss_rate** (missing rate of the dataset, default is 0.1)
+- **hint_rate** (rate of hints to be used in the model, default is 0.9)
+- **lr_D** (learning rate for the Discriminator, default is 0.001)
+- **lr_G** (learning rate for the Generator, default is 0.001)
+- **override** (boolean to override the output folder if it already exists, default is False)
+- **output_all** (boolean to output all the files, default is False)
 
 ## Contents
 
@@ -63,45 +63,45 @@ role in the imputation process :
     - handles datasets with missing values. It preprocesses the dataset, generates necessary masks, and 
     scales the data for model training
     - provides functions like:
-            - generate_hint()
-            - generate_mask()
-            - _create_ref()
+        - generate_hint()
+        - generate_mask()
+        - _create_ref()
 
 2. Metrics
     - tracks performance metrics during the training and evaluation of the model
     - provides functions like:
-            - _create_output()
+        - _create_output()
 
 3. Network
     - defines the architecture of the Generator and Discriminator networks
     - provides functions like:
-            - generate_sample()
-            - impute()
-            - evaluate_impute()
-            - update_D()
-            - update_G()
-            - train_ref()
-            - evaluate()
-            - train()
+        - generate_sample()
+        - impute()
+        - evaluate_impute()
+        - update_D()
+        - update_G()
+        - train_ref()
+        - evaluate()
+        - train()
 
 4. Param
     - contains the hyperparameters of the model
     - provides functions like:
-            - read_json()
-            - read_hyperparameters()
-            - _update_hypers()
+        - read_json()
+        - read_hyperparameters()
+        - _update_hypers()
 
 5. utils
     - contains utility functions for the model
     - provides functions like:
-            - create_csv()
-            - create_dist()
-            - create_missing()
-            - create_output()
-            - output()
-            - sample_idx()
-            - build_protein_matrix()
-            - build_protein_matrix_from_anndata()
+        - create_csv()
+        - create_dist()
+        - create_missing()
+        - create_output()
+        - output()
+        - sample_idx()
+        - build_protein_matrix()
+        - build_protein_matrix_from_anndata()
 
 ## Example
 
@@ -112,9 +112,9 @@ This dataset has a missing rate of 17.442532054984405%, 8657 samples and 4 featu
 
 To run the file with the PRIDE dataset, you can use the following command:
 
-.. code-block:: bash 
-
+```bash 
     python test.py 
+```
 
 
 ## Expected Output
@@ -130,13 +130,13 @@ as well as the metrics of the imputation process.
 
 In the end, you should have access to the following files:
 
-    - imputed.csv
-    - loss_D.csv
-    - loss_G.csv
-    - lossMSE_test.csv
-    - lossMSE_train.csv
-    - cpu.csv
-    - ram.csv 
-    - ram_percentage.csv
+- imputed.csv
+- loss_D.csv
+- loss_G.csv
+- lossMSE_test.csv
+- lossMSE_train.csv
+- cpu.csv
+- ram.csv 
+- ram_percentage.csv
 
 
