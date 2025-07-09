@@ -9,10 +9,29 @@ In this repository you may find a PyTorch implementation of Generative Adversari
 
 ## Table of Contents
 
+- [Repository Strucure](#repository-structure)
 - [Installation](#installation)
 - [How to Use](#usage)
 - [Demo](#demo)
 - [References](#reference)
+
+## Repository Structure
+
+Here are the main components you'll find in this repository:
+
+1. .github/workflows 
+    - contains the code for the automatization of the tests in the repository
+2. Datasets
+    - directory with datasets with missing values from PRIDE that can be used for testing 
+3. GenerativeProteomics: 
+    - Contains the core package source code 
+4. docs/source
+    - contains the information used for the documentation of our work (ReadtheDocs)
+5. tests:
+    - batery of unittests to assess the model's functionality
+6. use-case
+    - set of clear examples on how to use our model's functionalities 
+
 
 ## Installation
 
