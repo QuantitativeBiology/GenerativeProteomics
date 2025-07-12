@@ -11,7 +11,8 @@ In this repository you may find a PyTorch implementation of Generative Adversari
 
 - [Repository Strucure](#repository-structure)
 - [Installation](#installation)
-- [How to Use](#usage)
+- [Basic Usage](#basic-usage)
+- [GitHub](#github)
 - [Demo](#demo)
 - [References](#reference)
 
@@ -31,6 +32,7 @@ Here are the main components you'll find in this repository:
     - batery of unittests to assess the model's functionality
 6. use-case
     - set of clear examples on how to use our model's functionalities 
+    - includes examples on how to install the package and use it, how to run the tests, and how to download and use a pre-trained model from HuggingFace
 
 
 ## Installation
@@ -45,7 +47,66 @@ pip install GenerativeProteomics
 
 This way, you can install the package and its dependencies in one go.
 
-After that, you can import all the functions and classes from the package of the model and use them in your code.
+#### Basic Usage 
+
+```bash
+from GenerativeProteomics import utils, Network, Params, Metrics, Data
+import torch
+
+# Load your dataset
+dataset_path = "your_dataset.tsv"
+dataset_df = utils.build_protein_matrix(dataset_path) # use this function if dataset is a tsv
+#dataset_df = pd.read_csv(dataset_path) -> if your dataset is a csv
+dataset = dataset_df.values
+missing_header = dataset_df.columns.tolist()
+
+# Define your parameters
+params = Params(
+    input=dataset_path,
+    output="imputed.csv",
+    ref=None,
+    output_folder=".",
+    num_iterations=2001,
+    batch_size=128,
+    alpha=10,
+    miss_rate=0.1,
+    hint_rate=0.9,
+    lr_D=0.001,
+    lr_G=0.001,
+    override=1,
+    output_all=1,
+)
+
+# Define model architecture
+input_dim = dataset.shape[1]
+h_dim = input_dim
+net_G = torch.nn.Sequential(
+    torch.nn.Linear(input_dim * 2, h_dim),
+    torch.nn.ReLU(),
+    torch.nn.Linear(h_dim, h_dim),
+    torch.nn.ReLU(),
+    torch.nn.Linear(h_dim, input_dim),
+    torch.nn.Sigmoid()
+)
+net_D = torch.nn.Sequential(
+    torch.nn.Linear(input_dim * 2, h_dim),
+    torch.nn.ReLU(),
+    torch.nn.Linear(h_dim, h_dim),
+    torch.nn.ReLU(),
+    torch.nn.Linear(h_dim, input_dim),
+    torch.nn.Sigmoid()
+)
+
+# Set up the model and data
+metrics = Metrics(params)
+network = Network(hypers=params, net_G=net_G, net_D=net_D, metrics=metrics)
+data = Data(dataset=dataset, miss_rate=0.2, hint_rate=0.9, ref=None)
+
+# Run evaluation and training
+network.evaluate(data=data, missing_header=missing_header)
+network.train(data=data, missing_header=missing_header)
+```
+For a more detailed explanation on how to use the model and all the functionalities we have to offer, you can open the `use-case` directory.
 
 ### GitHub
 
@@ -57,7 +118,7 @@ If you prefer to use the code of the GenerativeProteomics model directly, you ca
 4. Install the necessary packages: `pip install -r libraries.txt`
 
 
-## How to Use
+#### How to Use
 
 If you just want to impute a general dataset, the most straightforward and simplest way to run GenerativeProteomics is to run: `python generativeproteomics.py -i /path/to/file_to_impute.csv`
 Running in this manner will result in two separate training phases.
@@ -89,7 +150,7 @@ If you want to test the efficacy of the code you may give a reference file conta
 Running this way will calculate the RMSE of the imputation in relation to the complete dataset.
 
 
-## Demo
+#### Demo
 
 In this repository you may find a folder named `breast`, inside it you have a breast cancer diagnostic dataset [[2]](#2) which you may use to try out the code.
 
