@@ -49,7 +49,7 @@ This way, you can install the package and its dependencies in one go.
 
 #### Basic Usage 
 
-```bash
+```python
 from GenerativeProteomics import utils, Network, Params, Metrics, Data
 import torch
 
