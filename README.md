@@ -52,11 +52,12 @@ This way, you can install the package and its dependencies in one go.
 ```python
 from GenerativeProteomics import utils, Network, Params, Metrics, Data
 import torch
+import pandas as pd
 
 # Load your dataset
 dataset_path = "your_dataset.tsv"
 dataset_df = utils.build_protein_matrix(dataset_path) # use this function if dataset is a tsv
-#dataset_df = pd.read_csv(dataset_path) -> if your dataset is a csv
+#dataset_df = pd.read_csv(dataset_path)  # if your dataset is a csv
 dataset = dataset_df.values
 missing_header = dataset_df.columns.tolist()
 
