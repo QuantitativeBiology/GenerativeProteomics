@@ -143,12 +143,12 @@ def build_protein_matrix(tsv_file):
     return matrix
 
 
-def build_protein_matrix_from_anndata(anndata_file)  -> pd.DataFrame:
+def build_protein_matrix_from_anndata(anndata_file: str)  -> pd.DataFrame:
     """
         An anndata file has the .h5ad extension.
     """
 
-    adata = ad.read_h5ad('../../HeLa_datasets_combined.h5ad')
+    adata = ad.read_h5ad(anndata_file)
 
     data = pd.DataFrame(
         adata.X,
