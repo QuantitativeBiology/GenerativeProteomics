@@ -98,7 +98,7 @@ data = Data(dataset=dataset, miss_rate=0.2, hint_rate=0.9, ref=None)
 # Run evaluation and training
 network.evaluate(data=data, missing_header=missing_header)
 network.train(data=data, missing_header=missing_header)
-print("Final Matrix:\n", metrics.data_imputed)
+print("Final Matrix:\n", metrics.data_imputed) 
 ```
 For a more detailed explanation on how to use the model and all the functionalities we have to offer, you can open the `use-case` directory.
 
