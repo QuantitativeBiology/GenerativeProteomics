@@ -9,7 +9,7 @@ Among those tasks, we can highlight the data processing, the imputation of missi
 
 Bellow, you can find a class diagram that showcases how these modules are connected and how they interact with each other.
 
-.. image:: _static/class_diagram_no_label.drawio
+.. image:: _static/class_diagram_no_label.drawio.png
     :alt: class_diagram_abstract
     :width: 500px
     :align: center
@@ -29,7 +29,7 @@ This diagram illustrates the overall architecture of GenerativeProteomics, showi
 Execution Flow   
 --------------
 
-1. The `ProtoGain` module orchestrates the imputation process.
+1. The `GenerativeProteomics` module orchestrates the imputation process.
 2. The `Data` module loads the dataset, which is used by the `Network`.
 3. The `Network` requires hyperparameters from the `Params` class.
 4. The `Metrics` class contains evaluation metrics from the training process.
