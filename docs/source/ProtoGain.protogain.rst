@@ -1,13 +1,13 @@
-Protogain Class
+GenerativeProteomics Class
 ========================
 
-.. automodule:: ProtoGain.protogain
+.. automodule:: ProtoGain.generativeproteomics
    :members:
    :undoc-members:
    :show-inheritance:
 
-Here you will find the class `Protogain` used during the training and evaluation of the model.
-The `Protogain` class is responsible for setting up, initializing, and running the GenerativeProteomics imputation process. 
+Here you will find the class `GenerativeProteomics` used during the training and evaluation of the model.
+The `GenerativeProteomics` class is responsible for setting up, initializing, and running the GenerativeProteomics imputation process. 
 It reads input arguments, configures the model, trains it, and saves the results.
 
 Methods

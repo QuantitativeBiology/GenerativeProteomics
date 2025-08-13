@@ -5,7 +5,7 @@ If your main goal is simply to just impute a general dataset, the most straightf
 
 .. code-block:: bash
 
-    python protogain.py -i /path/to/file_to_impute.csv 
+    python generativeproteomics.py -i /path/to/file_to_impute.csv 
 
 By running it in this manner, it will result in two separate training phases.
 
@@ -19,19 +19,19 @@ By running it in this manner, it will result in two separate training phases.
     Afterwards, a proper training phase takes place using the entire dataset. An **imputed.csv** file will be created containing the imputed dataset.
 
 However, there might be a few arguments which you may want to change. You can do this using a **parameters.json** file 
-(you may find an example in ``ProtoGain/breast/parameters.json``) or you can choose them directly in the command line.
+(you may find an example in ``GenerativeProteomics/breast/parameters.json``) or you can choose them directly in the command line.
 
 Run with a parameters.json file: 
 
 .. code-block:: bash
 
-    python protogain.py --parameters /path/to/parameters.json
+    python generativeproteomics.py --parameters /path/to/parameters.json
 
 Run with command line arguments: 
 
 .. code-block:: bash
 
-    python protogain.py -i /path/to/file_to_impute.csv -o imputed_name --ofolder ./results/ --it 2001
+    python generativeproteomics.py -i /path/to/file_to_impute.csv -o imputed_name --ofolder ./results/ --it 2001
 
 Arguments:
 
@@ -47,6 +47,6 @@ If you want to assess the efficiency of the code you may provide a reference fil
 
 .. code-block:: bash
 
-    python protogain.py -i /path/to/file_to_impute.csv --ref /path/to/complete_dataset.csv
+    python generativeproteomics.py -i /path/to/file_to_impute.csv --ref /path/to/complete_dataset.csv
 
 Running this way will calculate the RMSE of the imputation in relation to the complete dataset.

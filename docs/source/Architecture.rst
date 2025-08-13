@@ -9,7 +9,7 @@ Among those tasks, we can highlight the data processing, the imputation of missi
 
 Bellow, you can find a class diagram that showcases how these modules are connected and how they interact with each other.
 
-.. image:: _static/class_diagram_abstract.drawio.png
+.. image:: _static/class_diagram_no_label.drawio
     :alt: class_diagram_abstract
     :width: 500px
     :align: center
@@ -19,7 +19,7 @@ Overview
 
 This diagram illustrates the overall architecture of GenerativeProteomics, showing how the different components interact during the imputation process.
 
-- **ProtoGain**: The main entry point that initializes all classes.
+- **GenerativeProteomics**: The main entry point that initializes all classes.
 - **Data**: Handles dataset loading and preparation, as well as the creation of the hint matrix, the mask matrix and the synthetic reference dataset.
 - **Network**: Trains the model using the attributes from the `Data` class.
 - **Params**: Stores hyperparameters and passes them to the network.
