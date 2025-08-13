@@ -12,7 +12,7 @@ responsible for different tasks in the processing and imputation of large proteo
    ProtoGain.hypers
    ProtoGain.model
    ProtoGain.output
-   ProtoGain.generativeproteomics
+   ProtoGain.protogain
    ProtoGain.utils
 
 
