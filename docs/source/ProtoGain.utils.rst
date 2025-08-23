@@ -108,6 +108,7 @@ Functions
     Reads a Parquet file.
 
     **Steps**
+    
     1. Use polars to read the Parquet file.
     2. Process the data in the file 
     3. Return the resulting DataFrame. 
@@ -117,6 +118,7 @@ Functions
     Downloads and uses a pre-trained model from Hugging Face to perform data imputation.
 
     **Steps:**
+
     1. Builds the url of the model repository, based on the model's name provided.
     2. Loads the pre-trained model from teh Hugging Face repository.
     3. 
