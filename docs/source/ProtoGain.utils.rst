@@ -102,3 +102,21 @@ Functions
     2. Extracts relevant columns (protein, sample_accession, ribaq).
     3. Converts data into a pivoted matrix (proteins as index, samples as columns).
     4. Returns the formatted matrix.
+
+- handle_parquet(parquet_file)
+
+    Reads a Parquet file.
+
+    **Steps**
+    1. Use polars to read the Parquet file.
+    2. Process the data in the file 
+    3. Return the resulting DataFrame. 
+
+- hugging_face(model, dataset_path)
+
+    Downloads and uses a pre-trained model from Hugging Face to perform data imputation.
+
+    **Steps:**
+    1. Builds the url of the model repository, based on the model's name provided.
+    2. Loads the pre-trained model from teh Hugging Face repository.
+    3. 
