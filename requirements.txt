@@ -9,3 +9,5 @@ argparse
 psutil
 anndata
 polars
+huggingface_hub
+transformers
