@@ -163,13 +163,10 @@ def build_protein_matrix_from_anndata(anndata_file: str)  -> pd.DataFrame:
     return data
 
 def handle_parquet(parquet_file):
+    """ Function to read a parquet file and return a DataFrame with only numeric columns. """
 
     df = pl.read_parquet(parquet_file)
-    #df_pandas = df.to_pandas()
     df_numeric = df.select(pl.col(pl.Float64, pl.Int64, pl.Int32, pl.Float32))
-
-    #numeric_cols = df_pandas.select_dtypes(include=[np.number])
-    #dataset = numeric_cols.to_numpy(dtype=np.float32)
 
     return df_numeric
 
@@ -185,30 +182,24 @@ def hugging_face(model, dataset_path):
     weights_path = hf_hub_download(repo_id =f"QuantitativeBiology/{model}", filename="pytorch_model.bin", cache_dir = save_dir)
     model_path = hf_hub_download(repo_id = f"QuantitativeBiology/{model}", filename="modeling_gain_dann.py", cache_dir = save_dir)
 
-    print("config_path:", config_path)
-    print("weights_path:", weights_path)
-    print("model_path", model_path)
-
     directory = os.path.dirname(model_path)
-    print("directory:", directory)
 
+    # Add the directory containing 'modeling_gain_dann.py' to the Python path
     import sys
-    sys.path.append(directory)  # Add the directory containing 'modeling_gain_dann.py' to the Python path
+    sys.path.append(directory)  
 
     if model == "GAIN_DANN_model":
 
-    # Now you can import the functions or classes inside the file
+    # Import the functions and classes inside the file
         from modeling_gain_dann import GainDANNConfig, GainDANN
-
 
         print("import successfully done")
 
-        # Load config
+        # Load config file
         with open(config_path) as f:
             cfg = json.load(f)
 
         hela = pd.read_csv(dataset_path, index_col=0)
-        #hela_numeric = hela.drop(columns=['Project'])
 
         input_dim = hela.shape[1]
         
@@ -221,15 +212,13 @@ def hugging_face(model, dataset_path):
         # Load raw state_dict
         state_dict = torch.load(weights_path, map_location="cpu")
 
-        # Add "model." prefix to every key(because state_dict has the weights of GAIN_DANN but I added the Gain_DANN for the huggingFace accordance)
+        # Add "model." prefix to every key (because state_dict has the weights of GAIN_DANN but the Gain_DANN was added for the huggingFace accordance)
         renamed_state_dict = {f"model.{k}": v for k, v in state_dict.items()}
 
         # Load with corrected keys
         model.load_state_dict(renamed_state_dict)
 
         model.eval()
-
-        print(hela.dtypes)
 
         label_encoder = LabelEncoder()
         hela['Project'] = label_encoder.fit_transform(hela['Project'])

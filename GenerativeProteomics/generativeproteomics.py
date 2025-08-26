@@ -129,16 +129,10 @@ if __name__ == "__main__":
                 missing_header = df_missing.columns.tolist()
                 params.update_hypers(header=missing_header)
             elif missing_file.endswith(".parquet"):
-                print("Reading parquet file")
                 df_missing = utils.handle_parquet(missing_file)
-                print("Parquet file read - handle_parquet ")
-                print(df_missing)
                 missing = df_missing.to_numpy()
-                print("Parquet file read - to_numpy  done")
                 missing_header = df_missing.columns
-                print("Parquet file read - columns done")
                 params.update_hypers(header=missing_header)
-                print("Parquet file read - update_hypers done")
             else:
                 print("Invalid file format")
                 exit(2)
