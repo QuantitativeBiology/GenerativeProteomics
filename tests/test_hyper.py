@@ -79,7 +79,7 @@ class TestParams(unittest.TestCase):
         self.assertEqual(params.batch_size, 256)
         self.assertEqual(params.lr_G, 0.002)
         with self.assertRaises(AttributeError):
-            getattr(params, "non_existing_param")  # Should not exist
+            getattr(params, "non_existing_param")  
 
     def tearDown(self):
         """Clean up the temporary file after test execution"""

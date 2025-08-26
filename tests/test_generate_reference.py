@@ -25,7 +25,6 @@ class TestImputation(unittest.TestCase):
         dataset_df = pd.read_csv("breastMissing_20.csv")
         self.dataset = dataset_df.values
 
-        #mask = np.where(np.isnan(dataset), 0.0, 1.0)
         hint_rate = 0.9
         miss_rate=0.1
 

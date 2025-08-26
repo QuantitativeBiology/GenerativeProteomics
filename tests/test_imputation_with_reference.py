@@ -60,6 +60,7 @@ class TestImputation(unittest.TestCase):
         # Extract headers (missing_header)
         missing_header = dataset_df.columns.tolist()
 
+        # Dummy network structures based on input dimensions
         input_dim = dataset.shape[1]  
         h_dim = input_dim  
         net_G = torch.nn.Sequential(
@@ -106,7 +107,6 @@ class TestImputation(unittest.TestCase):
             file1 = pd.read_csv(".imputed.csv")
             file2 = pd.read_csv("output_with_reference.csv")
 
-            #np.testing.assert_array_equal(file1, file2, "Imputation performed successfully")
             np.testing.assert_allclose(file1.values, file2.values, rtol=1e-5, atol=1e-8)
       
         except Exception as e:
