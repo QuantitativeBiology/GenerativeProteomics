@@ -22,7 +22,8 @@ Inside each directory, you can find all the materials needed for it to work, inc
 
 If you want to test using Google Colab, you can visit our page in the following link:
 
-https://colab.research.google.com/drive/1a-DfiAtPqmU2AnfMS-plDuTkZOfQ_zrB?usp=sharing
+https://colab.research.google.com/drive/1ihtmsv_UvEz74YrLHZvATu1y2qH4X9-r?usp=sharing
+
 
 If you want to take a closer look at the code, you can visit our GitHub repository:
 
