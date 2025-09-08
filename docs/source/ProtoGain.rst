@@ -6,7 +6,7 @@ As mentioned before in the :ref:`Architecture` section, GenerativeProteomics is 
 responsible for different tasks in the processing and imputation of large proteomics datasets.
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 20
 
    ProtoGain.dataset
    ProtoGain.hypers
@@ -14,6 +14,6 @@ responsible for different tasks in the processing and imputation of large proteo
    ProtoGain.output
    ProtoGain.protogain
    ProtoGain.utils
-   ProtoGain.imputationmanager
+   ProtoGain.manager
 
 
