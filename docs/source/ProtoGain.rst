@@ -14,5 +14,6 @@ responsible for different tasks in the processing and imputation of large proteo
    ProtoGain.output
    ProtoGain.protogain
    ProtoGain.utils
+   ProtoGain.imputationmanager
 
 

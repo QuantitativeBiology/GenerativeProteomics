@@ -113,13 +113,4 @@ Functions
     2. Process the data in the file 
     3. Return the resulting DataFrame. 
 
-- hugging_face(model, dataset_path)
 
-    Downloads and uses a pre-trained model from Hugging Face to perform data imputation.
-
-    **Steps:**
-
-    1. Builds the url of the model repository, based on the model's name provided.
-    2. Loads the pre-trained model from the Hugging Face repository.
-    3. Saves the model locally.
-    4. Calls the model to perform imputation on the dataset located at dataset_path.
