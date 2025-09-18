@@ -2,6 +2,7 @@ from hypers import Params
 from model import Network
 from dataset import Data
 from output import Metrics
+from imputation_management import Imputation_Management
 import utils
 
 import torch
@@ -73,69 +74,74 @@ if __name__ == "__main__":
         output_all = args.outall
         model = args.model
 
-        if model is not None:
-            utils.hugging_face(model, missing_file)
+
+        if parameters_file is not None:
+            params = Params.read_hyperparameters(parameters_file)
+            missing_file = params.input
+            output_file = params.output
+            ref_file = params.ref
+            output_folder = params.output_folder
+            num_iterations = params.num_iterations
+            batch_size = params.batch_size
+            alpha = params.alpha
+            miss_rate = params.miss_rate
+            hint_rate = params.hint_rate
+            lr_D = params.lr_D
+            lr_G = params.lr_G
+            override = params.override
+            output_all = params.output_all
 
         else:
+            params = Params(
+                missing_file,
+                output_file,
+                ref_file,
+                output_folder,
+                None,
+                num_iterations,
+                batch_size,
+                alpha,
+                miss_rate,
+                hint_rate,
+                lr_D,
+                lr_G,
+                override,
+                output_all,
+            )
 
-            if parameters_file is not None:
-                params = Params.read_hyperparameters(parameters_file)
-                missing_file = params.input
-                output_file = params.output
-                ref_file = params.ref
-                output_folder = params.output_folder
-                num_iterations = params.num_iterations
-                batch_size = params.batch_size
-                alpha = params.alpha
-                miss_rate = params.miss_rate
-                hint_rate = params.hint_rate
-                lr_D = params.lr_D
-                lr_G = params.lr_G
-                override = params.override
-                output_all = params.output_all
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
 
-            else:
-                params = Params(
-                    missing_file,
-                    output_file,
-                    ref_file,
-                    output_folder,
-                    None,
-                    num_iterations,
-                    batch_size,
-                    alpha,
-                    miss_rate,
-                    hint_rate,
-                    lr_D,
-                    lr_G,
-                    override,
-                    output_all,
-                )
+        if missing_file is None:
+            print("Input file not provided")
+            exit(1)
+        if missing_file.endswith(".csv"):
+            df_missing = pd.read_csv(missing_file)
+            missing = df_missing.values
+            missing_header = df_missing.columns.tolist()
+            params.update_hypers(header=missing_header)
+        elif missing_file.endswith(".tsv"):
+            df_missing = utils.build_protein_matrix(missing_file)
+            missing = df_missing.values
+            missing_header = df_missing.columns.tolist()
+            params.update_hypers(header=missing_header)
+        elif missing_file.endswith(".parquet"):
+            df_missing = utils.handle_parquet(missing_file)
+            missing = df_missing.to_numpy()
+            missing_header = df_missing.columns
+            params.update_hypers(header=missing_header)
+        else:
+            print("Invalid file format")
+            exit(2)
 
-            if not os.path.exists(output_folder):
-                os.makedirs(output_folder)
+        if args.model is not None:
+            print(args.model)
+            imputation_management = Imputation_Management(args.model, df_missing, missing_file)
+            imputation_management.run_model(args.model)
+            exit(0)
 
-            if missing_file is None:
-                print("Input file not provided")
-                exit(1)
-            if missing_file.endswith(".csv"):
-                df_missing = pd.read_csv(missing_file)
-                missing = df_missing.values
-                missing_header = df_missing.columns.tolist()
-                params.update_hypers(header=missing_header)
-            elif missing_file.endswith(".tsv"):
-                df_missing = utils.build_protein_matrix(missing_file)
-                missing = df_missing.values
-                missing_header = df_missing.columns.tolist()
-                params.update_hypers(header=missing_header)
-            elif missing_file.endswith(".parquet"):
-                df_missing = utils.handle_parquet(missing_file)
-                missing = df_missing.to_numpy()
-                missing_header = df_missing.columns
-                params.update_hypers(header=missing_header)
-            else:
-                print("Invalid file format")
-                exit(2)
+        else:
+        
             dim = missing.shape[1]
             train_size = missing.shape[0]
 
