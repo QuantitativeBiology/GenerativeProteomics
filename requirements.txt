@@ -11,3 +11,7 @@ anndata
 polars
 huggingface_hub
 transformers
+holoviews
+datashader
+umap-learn
+seaborn
