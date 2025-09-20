@@ -8,7 +8,7 @@ from sklearn.model_selection import StratifiedKFold
 from torch.utils.data import DataLoader, TensorDataset, WeightedRandomSampler
 
 # model
-from gain_dann import GAIN_DANN
+from gaindannmodel import GAIN_DANN
 from hypers import Params
 from dataset import generate_hint
 from output import Metrics

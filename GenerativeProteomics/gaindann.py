@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import umap.umap_ as umap
 
 # model
-from gain_dann import GAIN_DANN
+from gaindannmodel import GAIN_DANN
 from hypers import Params
 from output import Metrics
 from paramsgaindann import ParamsGainDann
