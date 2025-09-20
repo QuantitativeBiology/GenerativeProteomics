@@ -5,9 +5,9 @@ from encoder import Encoder
 from decoder import Decoder
 from domain_classifier import DomainClassifier
 from grl import GradientReversalLayer
-from ProtoGain.model import Network
-from ProtoGain.hypers import Params
-from ProtoGain.output import Metrics
+from model import Network
+from hypers import Params
+from output import Metrics
 
 
 #-----------------------------------#

@@ -10,16 +10,16 @@ import umap.umap_ as umap
 
 # model
 from gain_dann import GAIN_DANN
-from ProtoGain.hypers import Params
-from ProtoGain.output import Metrics
+from hypers import Params
+from output import Metrics
 from paramsgaindann import ParamsGainDann
 from data_utils import Data
 from train import GainDannTrain
-from utils import inverse_transform_output
+from dann_utils import inverse_transform_output
 
 # post analysis
-from umap_analysis import umap_analysis
-from pca_analysis import pca_analysis
+# from umap_analysis import umap_analysis
+# from pca_analysis import pca_analysis
 from correlation import correlation_measured_predicted
 
 import logging
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     else:
         logger.setLevel(logging.INFO)
 
-    params_gain_dann = ParamsGainDann.read_hyperparameters("../../configs/params_gain_dann.json")
+    params_gain_dann = ParamsGainDann.read_hyperparameters("../configs/params_gain_dann.json")
     params = params_gain_dann.to_dict()
     logger.debug(params_gain_dann)
 

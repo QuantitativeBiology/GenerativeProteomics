@@ -9,16 +9,16 @@ from torch.utils.data import DataLoader, TensorDataset, WeightedRandomSampler
 
 # model
 from gain_dann import GAIN_DANN
-from ProtoGain.hypers import Params
-from ProtoGain.dataset import generate_hint
-from ProtoGain.output import Metrics
+from hypers import Params
+from dataset import generate_hint
+from output import Metrics
 
 from data_utils import Data
 from paramsgaindann import ParamsGainDann
 from early_stopping import EarlyStopping
 from metrics import MetricsTracker
 from evaluation import EvaluationTracker
-from utils import save_model, save_metadata
+from dann_utils import save_model, save_metadata
 
 import logging
 
