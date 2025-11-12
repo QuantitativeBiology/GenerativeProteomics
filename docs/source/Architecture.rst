@@ -9,7 +9,7 @@ Among those tasks, we can highlight the data processing, the imputation of missi
 
 Bellow, you can find a class diagram that showcases how these modules are connected and how they interact with each other.
 
-.. image:: _static/class_diagram_IM.drawio.png
+.. image:: _static/class_diagram_abstract.drawio.png
     :alt: class_diagram_abstract
     :width: 500px
     :align: center
@@ -26,6 +26,8 @@ This diagram illustrates the overall architecture of GenerativeProteomics, showi
 - **Metrics**: Computes key metrics such as loss values for both the Discriminator and Generator.
 - **Utils**: Provides auxiliary functions like indexing, output generation, and CSV creation.
 - **ImputationManager**: Manages the selection and execution of different imputation methods.
+- **ImputationModel**: Provides a common API to the difference pre-trained models that can be used, ensuring their consistency and compatibility with the rest of the codebase.
+- **GainDannImputationModel**: Contains the logic of the GAIN-DANN imputation method.
 
 Execution Flow   
 --------------
@@ -37,5 +39,7 @@ Execution Flow
 5. The `Utils` class provides helper functions for tasks like file management.
 6. The model outputs files such as `impute.csv`, `test_imputed.csv`, and performance metrics like `loss_G` and `loss_D`.
 7. The `ImputationManager` class allows users to select and run different imputation methods.
+8. The `ImputationModel` class serves as a base for various imputation models, ensuring a consistent interface.
+
 
 This structure ensures **modularity, maintainability, and scalability**, making it easier to extend GenerativeProteomics.
